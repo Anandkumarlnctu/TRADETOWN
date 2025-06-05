@@ -1,6 +1,7 @@
 package com.PACKAGE.TRADETOWN.ECOMM.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +18,13 @@ public class BuyerOnboarding {
 	
 	@Autowired BuyerService buyser;
 
+	@GetMapping("/buyer/logout")
+	public String logoutuser(HttpSession session)
+	{
+		session.invalidate();
+		return "redirect:/buyer/loginpage";
+		
+	}
 	@GetMapping("/buyer/loginpage")
 	public String buyerloginpage()
 	{

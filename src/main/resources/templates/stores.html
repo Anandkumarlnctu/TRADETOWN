@@ -14,7 +14,7 @@
     body {
       font-family: 'Rubik', sans-serif;
       background-color: #fefefe;
-      padding: 40px 20px;
+      padding: 40px 20px 0 20px;
     }
 
     h1 {
@@ -67,108 +67,104 @@
       margin-bottom: 10px;
     }
 
-    .buy-btn {
+    .buy-btn, .cart-btn {
       padding: 8px 14px;
-      background: #007bff;
       color: white;
       border-radius: 25px;
       text-decoration: none;
       display: inline-block;
       font-size: 0.9rem;
-      transition: background 0.3s;
       border: none;
+      margin-right: 5px;
+    }
+
+    .buy-btn {
+      background: #007bff;
     }
 
     .buy-btn:hover {
       background: #0056b3;
     }
+
+    .cart-btn {
+      background: #28a745;
+    }
+
+    .cart-btn:hover {
+      background: #1e7e34;
+    }
+
+    .footer {
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 15px;
+      margin-top: 60px;
+    }
+
+    .navbar-nav .nav-link {
+      margin-right: 15px;
+    }
+
+    .cart-icon {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Store Products</h1>
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container-fluid">
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/buyerlogin/success">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="/buyer/logout">Logout</a></li>
+        </ul>
+        <i class="fas fa-shopping-cart fa-lg cart-icon" data-bs-toggle="modal" data-bs-target="#cartModal"></i>
+      </div>
+    </div>
+  </nav>
+
+  <div style="height: 60px;"></div> <!-- Spacer for fixed navbar -->
+
+  <h1 id="storeTitle"></h1>
   <div class="container">
     <div id="productContainer" class="product-grid">
       <!-- Products will be rendered here -->
     </div>
   </div>
 
+  <!-- ✅ CART MODAL -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Your Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="cartItemsContainer">
+          <p>Loading...</p>
+        </div>
+        <div class="modal-footer">
+          <a href="/checkout" class="btn btn-success">Proceed to Checkout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search); 
-      const storename = params.get('storename');
-      console.log("Extracted storename:", storename);
 
-      if (!storename) {
-        document.getElementById('productContainer').innerHTML = `<p class="text-danger text-center">Invalid store.</p>`;
-        return;
-      }
-
-      fetch(`/products/getall/${storename}`)
-        .then(res => res.json())
-        .then(products => {
-          const container = document.getElementById('productContainer');
-          if (products.length === 0) {
-            container.innerHTML = `<p class="text-center text-muted">No products found for this store.</p>`;
-            return;
-          }
-
-          products.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-
-            card.innerHTML = `
-              <img src="/products/image/${product.id}" alt="Product Image">
-              <div class="product-content">
-                <div class="product-title">${product.productName}</div>
-                <div class="product-price">₹${product.productPrice}</div>
-                <button class="buy-btn" onclick="makePayment(${product.productPrice}, '${product.productid}')">Buy Now</button>
-              </div>
-            `;
-
-            container.appendChild(card);
-          });
-        })
-        .catch(err => {
-          console.error(err);
-          document.getElementById('productContainer').innerHTML = `<p class="text-danger text-center">Failed to load products. Try again later.</p>`;
-        });
-    });
-
-    function makePayment(amount, productId) {
-      const finalAmount = amount * 100; // convert to paisa
-
-      fetch('/create-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `amount=${finalAmount}`
-      })
-        .then(response => response.json())
-        .then(order => {
-          const options = {
-            "key": "rzp_test_HX8no9EuxOuyNG", // replace with your actual test key
-            "amount": order.amount,
-            "currency": order.currency,
-            "name": "Your Company",
-            "description": `Payment for product ${productId}`,
-            "order_id": order.id,
-            "callback_url": "/payment-callback",
-            "prefill": {
-              "name": "User Name",
-              "email": "user@example.com",
-            }
-          };
-          const rzp = new Razorpay(options);
-          rzp.open();
-        })
-        .catch(error => {
-          console.error("Payment initiation failed", error);
-        });
-    }
-  </script>
+  <script src="store.js"></script> 
 
 </body>
 </html>

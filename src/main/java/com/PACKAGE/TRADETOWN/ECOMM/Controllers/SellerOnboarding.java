@@ -29,6 +29,13 @@ public class SellerOnboarding {
 	SellerService selser;
 	@Autowired SellerRepository selrepo;
 	
+	@GetMapping("/seller/logout")
+	public String sellerlogout(HttpSession session)
+	{
+		session.invalidate();
+		return "redirect:/seller/loginpage";
+	}
+	
 	@GetMapping("/sellerlogin/success")
 	public String sellerloginsuccess(HttpSession session)
 	{

@@ -1,15 +1,15 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tradetown
-    username: root
-    password: Anand567@
+    url: postgresql://anand:TKPqignIe7ZS0ygFFMQuK4yE4NOa7wAH@dpg-d111fcadbo4c739i8hhg-a.oregon-postgres.render.com/tradetown
+    username: anand
+    password: TKPqignIe7ZS0ygFFMQuK4yE4NOa7wAH
 
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   mail:
     host: smtp.gmail.com
@@ -27,4 +27,4 @@ spring:
 server:
   servlet:
     session:
-      timeout: 1m
+      timeout: 5m

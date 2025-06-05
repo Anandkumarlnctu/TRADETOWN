@@ -10,6 +10,7 @@ public class OrderController {
 	@GetMapping("/ordersuccess")
 	public String ordersuccess()
 	{
+		
 		return "ordersuccess";
 	}
 	@GetMapping("/orderfail")
@@ -17,4 +18,7 @@ public class OrderController {
 	{
 		return "orderfail";
 	}
+	
+   
+	
 }

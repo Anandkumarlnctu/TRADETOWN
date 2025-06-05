@@ -34,6 +34,10 @@ public class ProductService {
 		return prodrepo.findBySeller_Sellerid(seller.getSellerid());
 		
 	}
+	public Optional<Product> findById(Long productId) {
+		// TODO Auto-generated method stub
+		return prodrepo.findById(productId);
+	}
 
 
 }
