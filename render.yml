@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: trade-town-app
+    env: docker
+    repo: https://github.com/Anandkumarlnctu/TRADETOWN
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    buildCommand: "./mvnw clean package -DskipTests"
+    startCommand: ""
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: postgresql://anand:TKPqignIe7ZS0ygFFMQuK4yE4NOa7wAH@dpg-d111fcadbo4c739i8hhg-a.oregon-postgres.render.com/tradetown
+      - key: SPRING_DATASOURCE_USERNAME
+        value: anand
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: TKPqignIe7ZS0ygFFMQuK4yE4NOa7wAH

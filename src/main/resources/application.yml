@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: postgresql://anand:TKPqignIe7ZS0ygFFMQuK4yE4NOa7wAH@dpg-d111fcadbo4c739i8hhg-a.oregon-postgres.render.com/tradetown
+    url: jdbc:postgresql://dpg-d111fcadbo4c739i8hhg-a.oregon-postgres.render.com/tradetown
     username: anand
     password: TKPqignIe7ZS0ygFFMQuK4yE4NOa7wAH
 
