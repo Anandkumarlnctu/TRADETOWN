@@ -42,14 +42,13 @@
       transform: translateY(-6px);
     }
 
-   .product-card img {
-  width: 100%;
-  height: auto;
-  max-height: 180px;
-  object-fit: contain;
-  background-color: #f9f9f9;
-}
-
+    .product-card img {
+      width: 100%;
+      height: auto;
+      max-height: 180px;
+      object-fit: contain;
+      background-color: #f9f9f9;
+    }
 
     .product-content {
       padding: 15px;
@@ -77,6 +76,7 @@
       display: inline-block;
       font-size: 0.9rem;
       transition: background 0.3s;
+      border: none;
     }
 
     .buy-btn:hover {
@@ -93,12 +93,12 @@
     </div>
   </div>
 
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-    	 const params = new URLSearchParams(window.location.search); 
-    	 const storename = params.get('storename');
-    	  console.log("Extracted storename:", storename);
-
+      const params = new URLSearchParams(window.location.search); 
+      const storename = params.get('storename');
+      console.log("Extracted storename:", storename);
 
       if (!storename) {
         document.getElementById('productContainer').innerHTML = `<p class="text-danger text-center">Invalid store.</p>`;
@@ -123,7 +123,7 @@
               <div class="product-content">
                 <div class="product-title">${product.productName}</div>
                 <div class="product-price">₹${product.productPrice}</div>
-                <a href="/buy/${product.productid}" class="buy-btn">Buy Now</a>
+                <button class="buy-btn" onclick="makePayment(${product.productPrice}, '${product.productid}')">Buy Now</button>
               </div>
             `;
 
@@ -135,6 +135,39 @@
           document.getElementById('productContainer').innerHTML = `<p class="text-danger text-center">Failed to load products. Try again later.</p>`;
         });
     });
+
+    function makePayment(amount, productId) {
+      const finalAmount = amount * 100; // convert to paisa
+
+      fetch('/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `amount=${finalAmount}`
+      })
+        .then(response => response.json())
+        .then(order => {
+          const options = {
+            "key": "rzp_test_HX8no9EuxOuyNG", // replace with your actual test key
+            "amount": order.amount,
+            "currency": order.currency,
+            "name": "Your Company",
+            "description": `Payment for product ${productId}`,
+            "order_id": order.id,
+            "callback_url": "/payment-callback",
+            "prefill": {
+              "name": "User Name",
+              "email": "user@example.com",
+            }
+          };
+          const rzp = new Razorpay(options);
+          rzp.open();
+        })
+        .catch(error => {
+          console.error("Payment initiation failed", error);
+        });
+    }
   </script>
 
 </body>

@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/tradetown
     username: root
-    password: password
+    password: Anand567@
 
   jpa:
     hibernate:
@@ -14,8 +14,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: username
-    password: password
+    username: adisingh234560@gmail.com
+    password: mwvb iecu vrea rpis
     protocol: smtp
     properties:
       mail:

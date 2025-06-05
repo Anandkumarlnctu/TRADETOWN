@@ -15,8 +15,8 @@ import org.springframework.web.servlet.view.RedirectView;
 @RestController
 public class PaymentController {
 
-    private static final String KEY_ID = "rzp_test_thbnstH0Bq80hy"; 
-    private static final String KEY_SECRET = "oc86adrgm685ECs3Wzdk0nOb"; 
+    private static final String KEY_ID = "rzp_test_HX8no9EuxOuyNG"; 
+    private static final String KEY_SECRET = "hienLRPfqg9lPk68edwzRLY2"; 
 
     @PostMapping("/create-order")
     public String createOrder(@RequestParam("amount") int amount) throws RazorpayException {
@@ -40,11 +40,11 @@ public class PaymentController {
 
             if (isValid) {
                 // Payment successful
-                RedirectView redirectView = new RedirectView("/success.html?orderId=" + razorpayOrderId);
+                RedirectView redirectView = new RedirectView("/ordersuccesshtml.html?orderId=" + razorpayOrderId);
                 return redirectView;
             } else {
                 // Payment failed
-                return new RedirectView("/failure.html"); // Create failure.html if needed
+                return new RedirectView("/orderfail.html"); // Create failure.html if needed
             }
         } catch (RazorpayException e) {
             System.err.println("Razorpay Exception during callback: " + e.getMessage());
