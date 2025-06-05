@@ -1,4 +1,3 @@
-# Use an official Java runtime as base image
 FROM eclipse-temurin:17-jdk
 
 # Set the working directory
