@@ -45,8 +45,8 @@ public class Seller {
 	public void setSellerpassword(String sellerpassword) {
 		this.sellerpassword = sellerpassword;
 	}
-	@Lob
-	@Column(columnDefinition = "LONGBLOB")
+	
+	@Column
     private byte[] storeimage;
 	@Column
 	private String imagetype;
