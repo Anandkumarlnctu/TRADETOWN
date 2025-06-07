@@ -9,7 +9,7 @@ import com.PACKAGE.TRADETOWN.ECOMM.Entity.Cartitems;
 
 public interface CartRepository extends JpaRepository<Cart,Long> {
 
-	Cart findByUsername(String username);
+	List<Cart> findByUsername(String username);
 
 	
 

@@ -12,9 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <style>
         body {
             font-family: 'Poppins', sans-serif;
             background: url('https://images.unsplash.com/photo-1607083206173-12f1f63d7f52?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
@@ -68,6 +66,7 @@
             border-radius: 12px;
             padding: 10px 20px;
             border: none;
+            position: relative;
         }
 
         .submit-btn:hover {
@@ -78,6 +77,42 @@
             height: 2px;
             background-color: #e0e0e0;
             margin: 30px 0;
+        }
+        
+        .loading-spinner {
+            display: none;
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            animation: spin 1s linear infinite;
+            left: calc(50% - 10px);
+        }
+        
+        .view-orders-btn {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            border-radius: 12px;
+            padding: 10px 20px;
+            border: none;
+            margin-left: 10px;
+        }
+        
+        .view-orders-btn:hover {
+            background-color: #218838;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -106,9 +141,13 @@
 <div class="container container-box mt-5">
     <!-- Add Product Form -->
     <div class="form-section">
-        <h4>Add New Product</h4>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>Add New Product</h4>
+            <button type="button" class="view-orders-btn" data-bs-toggle="modal" data-bs-target="#ordersModal">
+                <i class="fas fa-shopping-cart me-2"></i>View Orders
+            </button>
+        </div>
         <form id="addProductForm" enctype="multipart/form-data">
-
             <div class="mb-3">
                 <label for="productname" class="form-label">Product Name</label>
                 <input type="text" class="form-control" id="productname" name="productname" required>
@@ -121,44 +160,55 @@
                 <label for="productimage" class="form-label">Product Image</label>
                 <input type="file" class="form-control" id="productimage" name="productimage" accept="image/*" required>
             </div>
-            <button type="submit" class="submit-btn">Add Product</button>
-
+            <button type="submit" class="submit-btn">
+                <span>Add Product</span>
+                <span class="loading-spinner" id="submitSpinner"></span>
+            </button>
         </form>
     </div>
+</div>
 
-    <div class="section-divider"></div>
-
-    <!-- Orders Table -->
-    <div class="orders-section">
-        <h4>View Orders</h4>
-        <table class="table table-bordered table-striped mt-3">
-            <thead class="table-light">
-                <tr>
-                    <th>Order ID</th>
-                    <th>Product</th>
-                    <th>Buyer</th>
-                    <th>Status</th>
-                    <th>Cancel</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Sample Order Rows (replace dynamically from backend) -->
-                <tr>
-                    <td>#101</td>
-                    <td>Elegant Shoes</td>
-                    <td>John Doe</td>
-                    <td>Processing</td>
-                    <td><button class="cancel-btn">Cancel</button></td>
-                </tr>
-                <tr>
-                    <td>#102</td>
-                    <td>Leather Wallet</td>
-                    <td>Jane Smith</td>
-                    <td>Shipped</td>
-                    <td><button class="cancel-btn">Cancel</button></td>
-                </tr>
-            </tbody>
-        </table>
+<!-- Orders Modal -->
+<div class="modal fade" id="ordersModal" tabindex="-1" aria-labelledby="ordersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ordersModalLabel">Your Store Orders</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Loading spinner -->
+                <div id="ordersLoading" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading orders...</p>
+                </div>
+                
+                <div id="ordersContent" style="display: none;">
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Product</th>
+                                <th>Buyer</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="noOrders" style="display: none;" class="text-center py-4">
+                    <i class="fas fa-shopping-bag fa-3x mb-3 text-muted"></i>
+                    <p class="text-muted">No orders found for your store.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -167,6 +217,7 @@
 
 <!-- Dynamic Username and Store Name Fetch -->
 <script>
+    // Fetch seller information
     fetch("/seller/info")
         .then(response => response.json())
         .then(data => {
@@ -182,17 +233,31 @@
             window.location.href = "/seller/loginpage";
         });
     
+    // Add product form with loader
     document.getElementById("addProductForm").addEventListener("submit", function (e) {
         e.preventDefault(); // Stop normal form submission
 
         const form = document.getElementById("addProductForm");
         const formData = new FormData(form);
+        const submitBtn = form.querySelector('.submit-btn');
+        const spinner = document.getElementById("submitSpinner");
+        const btnText = submitBtn.querySelector('span');
+        
+        // Show loader and disable button
+        spinner.style.display = 'block';
+        submitBtn.disabled = true;
+        btnText.style.visibility = 'hidden';
 
         fetch("/products/add", {
             method: "POST",
             body: formData
         })
         .then(response => {
+            // Hide loader and enable button
+            spinner.style.display = 'none';
+            submitBtn.disabled = false;
+            btnText.style.visibility = 'visible';
+            
             if (response.redirected) {
                 // Session expired or not logged in
                 window.location.href = response.url;
@@ -206,9 +271,85 @@
             }
         })
         .catch(err => {
+            // Hide loader and enable button
+            spinner.style.display = 'none';
+            submitBtn.disabled = false;
+            btnText.style.visibility = 'visible';
+            
             console.error("Error adding product:", err);
             alert("Failed to add product. Please try again.");
         });
+    });
+    
+    // Orders modal functionality
+    const ordersModal = document.getElementById('ordersModal');
+    ordersModal.addEventListener('show.bs.modal', function () {
+        const ordersLoading = document.getElementById('ordersLoading');
+        const ordersContent = document.getElementById('ordersContent');
+        const noOrders = document.getElementById('noOrders');
+        const orderTableBody = document.getElementById('orderTableBody');
+        
+        // Show loading, hide content and no orders message
+        ordersLoading.style.display = 'block';
+        ordersContent.style.display = 'none';
+        noOrders.style.display = 'none';
+        
+        // Fetch orders for this store
+        fetch('/orders/store')
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/seller/loginpage';
+                        throw new Error('Not logged in');
+                    }
+                    throw new Error('Failed to fetch orders');
+                }
+                return response.json();
+            })
+            .then(orders => {
+                // Hide loading
+                ordersLoading.style.display = 'none';
+                
+                // Check if we have orders
+                if (orders.length === 0) {
+                    noOrders.style.display = 'block';
+                    return;
+                }
+                
+                // Show orders table and populate with data
+                ordersContent.style.display = 'block';
+                
+                // Clear previous orders
+                orderTableBody.innerHTML = '';
+                
+                // Add each order to the table
+                orders.forEach(order => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>#${order.id}</td>
+                        <td>${order.ordername}</td>
+                        <td>${order.buyername}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger cancel-btn">Cancel</button>
+                            <button class="btn btn-sm btn-info ms-2">Contact</button>
+                        </td>
+                    `;
+                    orderTableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                // Hide loading, show error
+                ordersLoading.style.display = 'none';
+                console.error('Error fetching orders:', error);
+                
+                // Display error message
+                ordersContent.style.display = 'none';
+                noOrders.style.display = 'block';
+                noOrders.innerHTML = `
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3 text-warning"></i>
+                    <p class="text-danger">Failed to load orders. Please try again later.</p>
+                `;
+            });
     });
 </script>
 

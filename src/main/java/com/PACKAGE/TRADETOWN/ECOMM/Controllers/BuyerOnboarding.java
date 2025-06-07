@@ -64,8 +64,7 @@ public class BuyerOnboarding {
 		}
 		return "redirect:/buyer/loginpage";
 	}
-	
-	@GetMapping("/store")
+		@GetMapping("/store")
 	public String getstore(HttpSession session)
 	{
 		Buyer user=(Buyer) session.getAttribute("loggedinuser");
@@ -74,6 +73,18 @@ public class BuyerOnboarding {
 			return "redirect:/buyer/loginpage";
 		}
 		return "stores";
+	}
+	
+	@GetMapping("/buyer/info")
+	@org.springframework.web.bind.annotation.ResponseBody
+	public java.util.Map<String, String> getBuyerInfo(HttpSession session) {
+	    Buyer buyer = (Buyer) session.getAttribute("loggedinuser");
+	    if (buyer == null) {
+	        return java.util.Map.of("error", "not_logged_in");
+	    }
+	    return java.util.Map.of(
+	        "username", buyer.getBuyername()
+	    );
 	}
 
 	

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.PACKAGE.TRADETOWN.ECOMM.Entity.Buyer;
+import com.PACKAGE.TRADETOWN.ECOMM.Entity.Cart;
 import com.PACKAGE.TRADETOWN.ECOMM.Entity.Cartitems;
 import com.PACKAGE.TRADETOWN.ECOMM.Entity.Product;
 import com.PACKAGE.TRADETOWN.ECOMM.Repository.CartRepository;
@@ -51,16 +52,47 @@ public class CartController {
 	    cartserv.removeFromCart(itemId);
 	    return ResponseEntity.ok("Deleted from cart");
 	}
-	
-	@GetMapping("/cart")
-	public List<Cartitems>getall(HttpSession session)
+		@GetMapping("/cart")
+	public ResponseEntity<?> getall(HttpSession session)
 	{
-		Buyer user=(Buyer) session.getAttribute("loggedinuser");
-		Long id=user.getBuyerid();
-		return crtr.findByCartId((long) 1);
+		Buyer user = (Buyer) session.getAttribute("loggedinuser");
 		
+		if (user == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+		}
+				String username = user.getBuyername();
+		List<Cart> carts = cartrepo.findByUsername(username);
+		
+		if (carts.isEmpty()) {
+			return ResponseEntity.ok(List.of()); // Return empty list if cart doesn't exist
+		}
+		
+		// Use the first cart found
+		Cart cart = carts.get(0);
+		return ResponseEntity.ok(cart.getItems());
 	}
 	
+	@GetMapping("/cart/count")
+	public ResponseEntity<?> getCartCount(HttpSession session) {
+		Buyer user = (Buyer) session.getAttribute("loggedinuser");
+		
+		if (user == null) {
+			return ResponseEntity.ok("0"); // Return 0 if user is not logged in
+		}
+		
+		String username = user.getBuyername();
+		List<Cart> carts = cartrepo.findByUsername(username);
+		
+		if (carts.isEmpty()) {
+			return ResponseEntity.ok("0"); // Return 0 if cart doesn't exist
+		}
+		
+		// Use the first cart found and get item count
+		Cart cart = carts.get(0);
+		int itemCount = cart.getItems().size();
+		
+		return ResponseEntity.ok(String.valueOf(itemCount));
+	}
 	    
 
 }

@@ -9,86 +9,536 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gradient-1: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --gradient-2: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            background-color: #f5f7fa;
+            background-image: 
+                radial-gradient(at 40% 20%, rgba(105, 154, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, rgba(72, 99, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, rgba(76, 201, 240, 0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, rgba(67, 97, 238, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(105, 154, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, rgba(72, 99, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, rgba(76, 201, 240, 0.1) 0px, transparent 50%);
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+        }
+
+        .navbar {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 8rem 1rem 4rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #566680;
+            margin: 0 auto 2.5rem;
+            max-width: 700px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .hero-blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(67, 97, 238, 0.05);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-blob:nth-child(1) {
+            top: -100px;
+            right: -100px;
+            background: rgba(76, 201, 240, 0.05);
+        }
+
+        .hero-blob:nth-child(2) {
+            bottom: -150px;
+            left: -150px;
+            background: rgba(58, 12, 163, 0.05);
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
 
         .selection-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 40px;
+            gap: 50px;
             justify-content: center;
             padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
         }
 
         .card-box {
             text-align: center;
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 320px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 340px;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         .card-box:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(67, 97, 238, 0.2);
+        }
+
+        .card-box:hover .card-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card-box:hover h3 {
+            background: var(--gradient-1);
+            color: white;
         }
 
         .card-box img {
             width: 100%;
-            height: 250px;
+            height: 280px;
             object-fit: cover;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .card-box:hover img {
+            transform: scale(1.08);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: rgba(67, 97, 238, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .card-button {
+            padding: 14px 32px;
+            background-color: white;
+            color: var(--primary-color);
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+            z-index: -1;
+        }
+
+        .card-button:hover {
+            color: white;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .card-button:hover:before {
+            width: 100%;
         }
 
         .card-box h3 {
             background-color: #ffffff;
             margin: 0;
-            padding: 20px 0;
+            padding: 22px 0;
             font-weight: 600;
             color: #333;
+            transition: all 0.4s ease;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         a.card-link {
             text-decoration: none;
+            display: block;
+            position: relative;
         }
-    </style>
+
+        .card-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .badge-new {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-2);
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .features-section {
+            padding: 3rem 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .features-title {
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .feature-box {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            padding: 1rem;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 4rem 0 2rem;
+            color: #566680;
+            width: 100%;
+            margin-top: 3rem;
+            background: linear-gradient(180deg, rgba(245, 247, 250, 0) 0%, #f5f7fa 100%);
+            position: relative;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-link {
+            margin: 0 15px;
+            color: #566680;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-links {
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary-color);
+            margin: 0 8px;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .selection-container {
+                padding: 20px;
+            }
+            
+            .card-box {
+                width: 100%;
+                max-width: 340px;
+            }
+            
+            .feature-icon {
+                font-size: 2rem;
+            }
+        }    </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-store-alt me-2"></i>TradeTown
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <div class="hero-section" data-aos="fade-down">
+        <div class="hero-blob"></div>
+        <div class="hero-blob"></div>
+        <h1 class="hero-title">Welcome to TradeTown</h1>
+        <p class="hero-subtitle">Your one-stop destination for buying and selling products. Experience a modern marketplace with secure transactions and seamless user experience.</p>
+    </div>
+
+    <!-- Cards Section -->
     <div class="selection-container">
-
         <!-- Buyer Card -->
-        <a href="/buyerlogin/success" class="card-link">
+        <a href="/buyerlogin/success" class="card-link" data-aos="fade-up" data-aos-delay="100">
             <div class="card-box">
-                <img src="https://images.unsplash.com/photo-1606813902872-4074f8a5f2e4?auto=format&fit=crop&w=900&q=80" alt="Buyer">
-                <h3><i class="fas fa-user"></i> I'm a Buyer</h3>
+                <span class="badge-new">Easy Shopping</span>
+                <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=900&q=80" alt="Buyer">
+                <div class="card-overlay">
+                    <span class="card-button">Get Started</span>
+                </div>
+                <h3><i class="fas fa-shopping-bag card-icon"></i>I'm a Buyer</h3>
             </div>
         </a>
 
         <!-- Seller Card -->
-        <a href="/sellerlogin/success" class="card-link">
+        <a href="/sellerlogin/success" class="card-link" data-aos="fade-up" data-aos-delay="200">
             <div class="card-box">
-                <img src="https://images.unsplash.com/photo-1515169067865-5387ec356754?auto=format&fit=crop&w=900&q=80" alt="Seller">
-                <h3><i class="fas fa-store"></i> I'm a Seller</h3>
+                <span class="badge-new">Sell Products</span>
+                <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=900&q=80" alt="Seller">
+                <div class="card-overlay">
+                    <span class="card-button">Get Started</span>
+                </div>
+                <h3><i class="fas fa-store card-icon"></i>I'm a Seller</h3>
             </div>
         </a>
-
     </div>
+
+    <!-- Features Section -->
+    <section class="features-section container" id="features" data-aos="fade-up">
+        <h2 class="features-title">Why Choose TradeTown?</h2>
+        <div class="row">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-box">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3 class="feature-title">Secure Transactions</h3>
+                    <p>Every transaction on TradeTown is protected with state-of-the-art security measures to ensure your data remains safe.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-box">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <h3 class="feature-title">Fast Delivery</h3>
+                    <p>Get your products delivered right to your doorstep with our efficient and quick delivery network.</p>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-box">
+                    <i class="fas fa-headset feature-icon"></i>
+                    <h3 class="feature-title">24/7 Support</h3>
+                    <p>Our customer service team is available round the clock to assist you with any queries or concerns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="container py-5" id="about" data-aos="fade-up">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <h2 class="mb-4">About TradeTown</h2>
+                <p class="mb-4">TradeTown is a modern e-commerce platform designed to connect buyers and sellers in a secure and user-friendly environment. We believe in creating a marketplace that empowers both sides of the transaction.</p>
+                <p>Our platform features an intuitive interface, robust security measures, and a wide range of products to choose from. Whether you're looking to buy or sell, TradeTown has you covered.</p>
+            </div>
+            <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+                <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=900&q=80" alt="About TradeTown" class="img-fluid rounded-4 shadow-lg">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Home</a>
+                <a href="#features" class="footer-link">Features</a>
+                <a href="#about" class="footer-link">About</a>
+                <a href="#" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Privacy</a>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <p>© 2025 TradeTown. All rights reserved.</p>
+        </div>
+    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -11,125 +11,1393 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
   <style>
+    :root {
+      --primary-color: #ff6f91;
+      --secondary-color: #5271ff;
+      --accent-color: #ffcc41;
+      --text-color: #2d3748;
+      --light-bg: #ffffff;
+      --dark-bg: #1a202c;
+      --success-color: #48bb78;
+      --warning-color: #ed8936;
+      --danger-color: #e53e3e;
+    }
+    
     body {
       font-family: 'Rubik', sans-serif;
-      background: linear-gradient(to right, #d9a7c7, #fffcdc);
+      background: linear-gradient(135deg, #f6f0fd, #f0e5ff, #eaf5ff);
       margin: 0;
-      padding: 40px 20px;
+      padding: 0;
+      min-height: 100vh;
+      color: var(--text-color);
     }
 
-    h1 {
+    h1, h2 {
       text-align: center;
-      margin-bottom: 50px;
       font-weight: 700;
-      color: #333;
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+    }
+      h1 {
+      font-size: 2.5rem;
+      margin: 2rem 0 3rem;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
     }
 
     .store-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 30px;
-    }
-
-    .store-card {
-      background: white;
+    }    .store-card {
+      background: var(--light-bg);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .store-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: rgba(255, 111, 145, 0.2);
+    }
+    
+    .store-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent, rgba(255, 111, 145, 0.05));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: 16px;
+    }
+    
+    .store-card:hover::before {
+      opacity: 1;
     }
 
     .store-card img {
       width: 100%;
-      height: 200px;
+      height: 220px;
       object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .store-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .store-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--accent-color);
+      color: var(--dark-bg);
+      padding: 5px 12px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     }
 
     .store-content {
-      padding: 20px;
+      padding: 25px;
+      position: relative;
     }
 
     .store-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #444;
-    }
-
-    .store-desc {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-color);
+    }    .store-desc {
       font-size: 0.95rem;
       color: #666;
       min-height: 60px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }    .store-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-
+    
     .enter-btn {
-      display: block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background: #ff6f91;
+      flex: 1;
+      padding: 12px 20px;
+      background: linear-gradient(45deg, var(--primary-color), #ff88a3);
       border: none;
-      border-radius: 30px;
+      border-radius: 12px;
       color: white;
       font-weight: 600;
       text-align: center;
       text-decoration: none;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 111, 145, 0.3);
     }
 
     .enter-btn:hover {
-      background: #ff4e6b;
+      background: linear-gradient(45deg, #ff5c82, var(--primary-color));
+      box-shadow: 0 6px 20px rgba(255, 111, 145, 0.4);
+      transform: translateY(-2px);
       color: white;
+    }
+    
+    .quick-view-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      color: #495057;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .quick-view-btn:hover {
+      background-color: #e9ecef;
+      color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+      /* Stores Section */
+    .stores-section {
+      padding: 60px 0;
+      position: relative;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .search-box {
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    
+    .search-box .input-group {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .search-box .input-group-text {
+      background-color: white;
+      border: none;
+      color: #666;
+      padding-left: 15px;
+    }
+    
+    .search-box input {
+      border: none;
+      padding: 15px;
+      font-size: 1rem;
+    }
+    
+    .search-box input:focus {
+      box-shadow: none;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 50px 0;
+      color: #888;
+    }
+    
+    .order-card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .order-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .order-id {
+      font-weight: 600;
+      color: #6c757d;
+    }
+    
+    .order-store {
+      font-weight: 700;
+      color: #ff6f91;
+    }
+    
+    .order-product {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    .orders-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+      .navbar {
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      padding: 12px 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .navbar-glass {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+      .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding: 5px 0;
+    }
+    
+    .nav-link {
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 8px 15px;
+      margin: 0 5px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--primary-color);
+    }
+    
+    .nav-link.active {
+      color: var(--primary-color) !important;
+      background-color: rgba(255, 111, 145, 0.1);
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      padding: 140px 0 60px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 0 0 30px 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 30px;
+      max-width: 600px;
+    }
+    
+    .hero-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Loader Styles */
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 0;
+      text-align: center;
+    }
+    
+    .loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #ff6f91;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+      .loader-text {
+      color: #666;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Additional Modern Styles */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    
+    .navbar-scrolled {
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 8px 0;
+    }
+    
+    /* Enhanced Responsive Design */
+    @media (max-width: 992px) {
+      .hero-section {
+        padding: 120px 0 40px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 100px 0 30px;
+        text-align: center;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .store-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .store-card {
+        margin-bottom: 20px;
+      }
+      
+      .store-grid {
+        display: block;
+      }
+      
+      .modal-dialog {
+        margin: 10px;
+      }
+    }
+    
+    /* Button styles */
+    .btn-primary {
+      background: linear-gradient(45deg, var(--primary-color), #ff88a3);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(255, 111, 145, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(45deg, #ff5c82, var(--primary-color));
+      box-shadow: 0 6px 20px rgba(255, 111, 145, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover,    .btn-outline-primary.active {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+    }
+    
+    /* Footer Styles */
+    .footer {
+      background-color: #ffffff;
+      box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.05);
+      position: relative;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      margin-top: 60px;
+    }
+    
+    .footer-heading {
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-color);
+    }
+    
+    h5.footer-heading {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      font-size: 1.5rem;
+    }
+    
+    .footer-text {
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: #666;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      color: var(--text-color);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .social-link:hover {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .footer-divider {
+      margin: 30px 0 25px;
+      opacity: 0.1;
+    }
+    
+    .copyright-text {
+      color: #999;
+      margin-bottom: 0;
+    }
+    
+    .footer-bottom-links a {
+      color: #888;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+      .footer-bottom-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    /* Back to Top Button */
+    .back-to-top-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 999;
+    }
+    
+    .back-to-top-btn.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .back-to-top-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Modal Styles */    /* Enhanced Modal Styles */
+    .modal-dialog {
+      transform: translateY(20px);
+      transition: transform 0.3s ease-out !important;
+    }
+    
+    .modal.show .modal-dialog {
+      transform: translateY(0);
+    }
+    
+    .modal-backdrop.show {
+      opacity: 0.7;
+    }
+    
+    .modal-content {
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      border: none;
+      overflow: hidden;
+      animation: modal-in 0.3s ease-out;
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 24px 30px;
+      background: linear-gradient(to right, rgba(255, 111, 145, 0.05), rgba(255, 255, 255, 0));
+    }
+    
+    .modal-title {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 1.3rem;
+    }
+    
+    .modal-body {
+      padding: 30px;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 20px 30px;
+      background-color: rgba(0, 0, 0, 0.01);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      border-radius: 12px;
+      padding: 10px 24px;
+      border: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+      @keyframes modal-in {
+      from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    /* Quick View Styles */
+    .quick-view-header {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .quick-view-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .quick-view-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+      color: white;
+    }
+    
+    .quick-view-title {
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .quick-view-info {
+      background-color: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      height: 100%;
+    }
+    
+    .quick-view-info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .quick-view-info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    .info-value {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+    
+    .stars {
+      color: #ffc107;
+    }
+    
+    .stars span {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-left: 3px;
     }
   </style>
 </head>
-<body>
+<body>  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-glass fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-store-alt me-2"></i>TradeTown
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#stores-section">
+              <i class="fas fa-shopping-bag me-1"></i> Stores
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#ordersModal">
+              <i class="fas fa-box me-1"></i> My Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link" id="welcomeUser">
+              <i class="fas fa-user-circle me-1"></i> Welcome
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="/buyer/logout">
+              <i class="fas fa-sign-out-alt me-1"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-7">
+          <h1>Find Amazing Products</h1>
+          <p class="hero-subtitle">Discover unique stores and products from sellers around the world.</p>
+        </div>
+        <div class="col-md-5 d-none d-md-block">
+          <img src="https://images.unsplash.com/photo-1561715276-a2d087060f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80" alt="Shopping" class="hero-image">
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Stores Section -->
+  <section id="stores-section" class="stores-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Explore All Stores</h2>
+        <p class="section-subtitle">Discover unique products from our trusted sellers</p>
+      </div>
+      
+      <!-- Search Box -->
+      <div class="search-box mb-4">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input type="text" id="storeSearchInput" class="form-control" placeholder="Search stores...">
+        </div>
+      </div>
 
-  <h1>Explore All Stores</h1>
-
-  <div class="container">
-    <div id="storeContainer" class="store-grid">
-      <!-- Stores will be populated here dynamically -->
+      <!-- Loading indicator -->
+      <div id="storeLoader" class="loader-container">
+        <div class="loader"></div>
+        <div class="loader-text">Loading stores, please wait...</div>
+      </div>
+      
+      <div id="storeContainer" class="store-grid" style="display: none;">
+        <!-- Stores will be populated here dynamically -->
+      </div>
+      
+      <div id="noResults" class="no-results" style="display: none;">
+        <i class="fas fa-store-slash fa-3x mb-3"></i>
+        <p>No stores match your search</p>      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h5 class="footer-heading">TradeTown</h5>
+          <p class="footer-text">Discover amazing products from sellers around the world. Our platform connects you with unique items and trusted stores.</p>
+        </div>
+        <div class="col-lg-2 col-md-4 col-6 mb-4 mb-md-0">
+          <h6 class="footer-heading">Shop</h6>
+          <ul class="footer-links">
+            <li><a href="#stores-section">All Stores</a></li>
+            <li><a href="#">Featured Products</a></li>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Special Offers</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-2 col-md-4 col-6 mb-4 mb-md-0">
+          <h6 class="footer-heading">Account</h6>
+          <ul class="footer-links">
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#ordersModal">My Orders</a></li>
+            <li><a href="#">My Profile</a></li>
+            <li><a href="#">Wishlists</a></li>
+            <li><a href="#">Settings</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-md-4">
+          <h6 class="footer-heading">Stay Connected</h6>
+          <p class="footer-text mb-3">Follow us on social media for updates and offers</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <p class="copyright-text">© 2025 TradeTown. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="footer-bottom-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Help Center</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+    <!-- Quick View Modal -->
+  <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="quickViewModalLabel">
+            <i class="fas fa-store me-2"></i><span id="quickViewStoreName">Store Details</span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div id="quickViewLoader" class="loader-container py-5">
+            <div class="loader"></div>
+            <div class="loader-text">Loading store details...</div>
+          </div>
+          
+          <div id="quickViewContent" style="display: none">
+            <div class="quick-view-header">
+              <img id="quickViewImage" src="" alt="Store Image" class="quick-view-img">
+              <div class="quick-view-overlay">
+                <h3 id="quickViewTitle" class="quick-view-title"></h3>
+              </div>
+            </div>
+            <div class="quick-view-body p-4">
+              <div class="row">
+                <div class="col-md-8">
+                  <h5 class="mb-3">About the Store</h5>
+                  <p id="quickViewDescription" class="mb-4"></p>
+                  <div class="d-grid">
+                    <a id="quickViewEnterBtn" href="#" class="btn btn-primary btn-lg">
+                      <i class="fas fa-shopping-bag me-2"></i>Enter Store
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="quick-view-info">
+                    <div class="quick-view-info-item">
+                      <span class="info-label"><i class="fas fa-cubes me-2"></i>Products</span>
+                      <span class="info-value" id="quickViewProducts">Loading...</span>
+                    </div>
+                    <div class="quick-view-info-item">
+                      <span class="info-label"><i class="fas fa-star me-2"></i>Rating</span>
+                      <span class="info-value">
+                        <div class="stars">
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star"></i>
+                          <i class="fas fa-star-half-alt"></i>
+                          <span>(4.5)</span>
+                        </div>
+                      </span>
+                    </div>
+                    <div class="quick-view-info-item">
+                      <span class="info-label"><i class="fas fa-clock me-2"></i>Since</span>
+                      <span class="info-value">June 2025</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- JavaScript to Fetch Store Data -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const endpoint = 'https://your-api-url.com/seller/all'; // Replace with your actual API
-      const container = document.getElementById('storeContainer');
-
-      fetch("/stores/getall")
-        .then(res => res.json())
+  <!-- Orders Modal -->
+  <div class="modal fade" id="ordersModal" tabindex="-1" aria-labelledby="ordersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ordersModalLabel">
+            <i class="fas fa-shopping-bag me-2"></i>My Orders
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Order filter -->
+          <div class="order-filters mb-4" style="display: none;" id="orderFilters">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="input-group w-50">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" id="orderSearchInput" class="form-control" placeholder="Search orders...">
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" data-filter="all">All</button>
+                <button type="button" class="btn btn-outline-primary" data-filter="recent">Recent</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Loading indicator -->
+          <div id="ordersLoader" class="loader-container">
+            <div class="loader"></div>
+            <div class="loader-text">Loading your orders, please wait...</div>
+          </div>
+          
+          <div id="ordersContainer" class="orders-container" style="display: none;">
+            <!-- Orders will be populated here dynamically -->
+          </div>
+          
+          <div id="noOrders" style="display: none;" class="text-center py-5">
+            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076432.png" alt="Empty orders" class="mb-4" style="width: 120px; opacity: 0.7;">
+            <h5>No Orders Yet</h5>
+            <p class="text-muted">It looks like you haven't placed any orders yet.</p>
+            <button type="button" class="btn btn-primary mt-2" data-bs-dismiss="modal">
+              <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript to Fetch Data -->
+  <script>    document.addEventListener('DOMContentLoaded', function () {
+      // Add "contains" selector support for older browsers
+      jQuery.expr[':'].contains = function(a, i, m) {
+        return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+      };
+      
+      // Fetch and display stores
+      fetchStores();
+      
+      // Fetch user info
+      fetchUserInfo();
+      
+      // Set up the orders modal to fetch orders when opened
+      const ordersModal = document.getElementById('ordersModal');
+      ordersModal.addEventListener('show.bs.modal', function () {
+        fetchUserOrders();
+      });
+      
+      // Set up smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          if (this.getAttribute('href') === '#') return; // Skip for modal triggers
+          
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          document.querySelector(targetId).scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Update active nav link
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+          });
+          this.classList.add('active');
+        });
+      });
+      
+      // Set up store search functionality
+      const searchInput = document.getElementById('storeSearchInput');
+      searchInput.addEventListener('input', function() {
+        filterStores(this.value.trim().toLowerCase());
+      });
+        // Setup order filtering
+      setupOrderFilters();
+      
+      // Setup quick view modal
+      setupQuickView();
+      
+      // Add navbar scroll effect
+      window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+          navbar.classList.add('navbar-scrolled');
+        } else {
+          navbar.classList.remove('navbar-scrolled');
+        }
+      });
+      
+      // Add back-to-top button functionality
+      const backToTopBtn = document.createElement('button');
+      backToTopBtn.className = 'back-to-top-btn';
+      backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+      document.body.appendChild(backToTopBtn);
+      
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.add('show');
+        } else {
+          backToTopBtn.classList.remove('show');
+        }
+      });
+      
+      backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+    
+    // Function to filter stores based on search input
+    function filterStores(searchText) {
+      const storeCards = document.querySelectorAll('.store-card');
+      const noResults = document.getElementById('noResults');
+      let matchFound = false;
+      
+      storeCards.forEach(card => {
+        const title = card.querySelector('.store-title').textContent.toLowerCase();
+        const desc = card.querySelector('.store-desc').textContent.toLowerCase();
+        
+        if (title.includes(searchText) || desc.includes(searchText) || searchText === '') {
+          card.style.display = 'block';
+          matchFound = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      
+      // Show/hide no results message
+      noResults.style.display = matchFound ? 'none' : 'block';
+    }
+    
+    // Function to set up order filters
+    function setupOrderFilters() {
+      const filterButtons = document.querySelectorAll('.order-filters [data-filter]');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Update active button state
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filter orders based on selection
+          const filter = this.getAttribute('data-filter');
+          filterOrders(filter);
+        });
+      });
+      
+      // Setup order search
+      const orderSearchInput = document.getElementById('orderSearchInput');
+      if (orderSearchInput) {
+        orderSearchInput.addEventListener('input', function() {
+          searchOrders(this.value.trim().toLowerCase());
+        });
+      }
+    }
+    
+    // Function to filter orders
+    function filterOrders(filter) {
+      const orders = document.querySelectorAll('.order-card');
+      if (!orders.length) return;
+      
+      orders.forEach(order => {
+        if (filter === 'all') {
+          order.style.display = 'block';
+        } else if (filter === 'recent') {
+          // This is a simple example - in a real app, you'd check dates
+          // For now, just show the first 3 orders as "recent"
+          const index = Array.from(orders).indexOf(order);
+          order.style.display = index < 3 ? 'block' : 'none';
+        }
+      });
+    }
+    
+    // Function to search orders
+    function searchOrders(searchText) {
+      const orders = document.querySelectorAll('.order-card');
+      if (!orders.length) return;
+      
+      orders.forEach(order => {
+        const productName = order.querySelector('.order-product').textContent.toLowerCase();
+        const storeName = order.querySelector('.order-store').textContent.toLowerCase();
+        
+        if (productName.includes(searchText) || storeName.includes(searchText) || searchText === '') {
+          order.style.display = 'block';
+        } else {
+          order.style.display = 'none';
+        }
+      });
+    }
+      // Function to fetch user info
+    function fetchUserInfo() {
+      fetch('/buyer/info')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to fetch user info');
+          }
+          return response.json();
+        })
         .then(data => {
-          data.forEach(store => {
+          const welcomeUser = document.getElementById('welcomeUser');
+          if (welcomeUser && data.username) {
+            welcomeUser.innerHTML = `<i class="fas fa-user-circle me-1"></i> ${data.username}`;
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching user info:', err);
+        });
+    }
+    
+    // Setup quick view functionality
+    function setupQuickView() {
+      // Initialize the quick view modal
+      const quickViewModal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+      
+      // Set up event delegation for quick view buttons
+      document.addEventListener('click', function(event) {
+        if (event.target.closest('.quick-view-btn')) {
+          const button = event.target.closest('.quick-view-btn');
+          const storeId = button.dataset.storeId;
+          const storeName = button.dataset.storeName;
+          
+          showQuickView(storeId, storeName, quickViewModal);
+        }
+      });
+    }
+    
+    // Function to show quick view
+    function showQuickView(storeId, storeName, modal) {
+      // Show the modal
+      modal.show();
+      
+      // Set initial content
+      document.getElementById('quickViewStoreName').textContent = storeName;
+      document.getElementById('quickViewTitle').textContent = storeName;
+      document.getElementById('quickViewEnterBtn').href = `/store?storename=${storeName}`;
+      
+      // Show loader, hide content
+      document.getElementById('quickViewLoader').style.display = 'flex';
+      document.getElementById('quickViewContent').style.display = 'none';
+      
+      // Set store image
+      document.getElementById('quickViewImage').src = `/seller/image/${storeId}`;
+      
+      // This would typically be a fetch to get more store info
+      // For now, we'll simulate it with a timeout
+      setTimeout(() => {      // Get the store card to extract existing info
+        const storeCard = $(`.store-card .store-content .store-title:contains('${storeName}')`).closest('.store-card');
+        const description = storeCard.length ? 
+          storeCard.find('.store-desc').text() : 
+          'This store offers a variety of unique products. Browse through their collection to find exactly what you need!';
+        
+        // Update modal content
+        document.getElementById('quickViewDescription').textContent = description;
+        
+        // Simulate product count (in a real app, this would be fetched from an API)
+        document.getElementById('quickViewProducts').textContent = Math.floor(Math.random() * 50) + 5;
+        
+        // Hide loader, show content
+        document.getElementById('quickViewLoader').style.display = 'none';
+        document.getElementById('quickViewContent').style.display = 'block';
+      }, 800);
+    }function fetchStores() {
+      const container = document.getElementById('storeContainer');
+      const loader = document.getElementById('storeLoader');
+      
+      // Show loader, hide container
+      loader.style.display = 'flex';
+      container.style.display = 'none';
+      
+      fetch("/stores/getall")
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Failed to load stores');
+          }
+          return res.json();
+        })
+        .then(data => {
+          // Hide loader
+          loader.style.display = 'none';
+          // Show container
+          container.style.display = 'grid';
+          
+          if (data.length === 0) {
+            container.innerHTML = `
+              <div class="col-12 text-center py-5">
+                <img src="https://cdn-icons-png.flaticon.com/512/6598/6598519.png" alt="No stores" style="width: 150px; opacity: 0.6;" class="mb-4">
+                <h3>No Stores Available</h3>
+                <p class="text-muted">Check back later for exciting new stores!</p>
+              </div>`;
+            return;
+          }
+          
+          // Clear previous content
+          container.innerHTML = '';
+          
+          // Add fade-in animation for cards
+          const delay = 100; // ms between each card animation
+          
+          data.forEach((store, index) => {
             const card = document.createElement('div');
             card.className = 'store-card';
-
-            card.innerHTML = `
-            	<img src="/seller/image/${store.sellerid}" alt="Store Image" class="store-img">
-
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            // Generate a random badge for some stores (just for visual appeal)
+            const showBadge = Math.random() > 0.7;
+            const badges = ['NEW', 'POPULAR', 'FEATURED'];
+            const randomBadge = badges[Math.floor(Math.random() * badges.length)];
+              card.innerHTML = `
+              <img src="/seller/image/${store.sellerid}" alt="${store.storename}" class="store-img">
+              ${showBadge ? `<div class="store-badge">${randomBadge}</div>` : ''}
               <div class="store-content">
                 <div class="store-title">${store.storename}</div>
-                <div class="store-desc">${store.storedesc}</div>
-                <a href="/store?storename=${store.storename}" class="enter-btn">Enter Store</a>
-
+                <div class="store-desc">${store.storedesc || 'Explore our range of products!'}</div>
+                <div class="store-actions">
+                  <a href="/store?storename=${store.storename}" class="enter-btn">
+                    <i class="fas fa-shopping-bag me-2"></i>Enter Store
+                  </a>
+                  <button class="quick-view-btn" data-store-id="${store.sellerid}" data-store-name="${store.storename}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
               </div>
             `;
             container.appendChild(card);
+            
+            // Trigger animation with staggered delay
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, index * delay);
+          });
+          
+          // Show the search box now that we have stores
+          document.querySelector('.search-box').style.display = 'block';
+        })
+        .catch(err => {
+          // Hide loader
+          loader.style.display = 'none';
+          
+          console.error('Error fetching stores:', err);
+          container.innerHTML = `
+            <div class="col-12 text-center py-5">
+              <i class="fas fa-exclamation-triangle fa-3x mb-3 text-warning"></i>
+              <h3>Oops! Something went wrong</h3>
+              <p class="text-muted mb-4">We couldn't load the stores. Please try again later.</p>
+              <button class="btn btn-primary" onclick="fetchStores()">
+                <i class="fas fa-sync-alt me-2"></i>Try Again
+              </button>
+            </div>`;
+          container.style.display = 'block';
+        });
+    }      function fetchUserOrders() {
+      const container = document.getElementById('ordersContainer');
+      const loader = document.getElementById('ordersLoader');
+      const noOrders = document.getElementById('noOrders');
+      
+      // Show loader, hide container and no orders
+      loader.style.display = 'flex';
+      container.style.display = 'none';
+      noOrders.style.display = 'none';
+      
+      fetch("/orders/user")
+        .then(res => {
+          if (!res.ok) {
+            if (res.status === 401) {
+              window.location.href = '/buyer/loginpage';
+              throw new Error('Not logged in');
+            }
+            throw new Error('Failed to fetch orders');
+          }
+          return res.json();
+        })
+        .then(orders => {
+          // Hide loader
+          loader.style.display = 'none';
+          
+          // Check if we have orders
+          if (orders.length === 0) {
+            noOrders.style.display = 'block';
+            return;
+          }
+          
+          // Show orders container
+          container.style.display = 'block';
+            // Show filters when we have orders
+          document.getElementById('orderFilters').style.display = 'block';
+          
+          let html = '';
+          orders.forEach(order => {
+            html += `
+              <div class="order-card">
+                <div class="order-header">
+                  <span class="order-id">
+                    <i class="fas fa-tag me-2"></i>Order #${order.id}
+                  </span>
+                  <span class="order-store">
+                    <i class="fas fa-store-alt me-1"></i>${order.storename}
+                  </span>
+                </div>
+                <div class="order-product">
+                  <i class="fas fa-box me-2"></i>${order.ordername}
+                </div>
+                <div class="order-actions mt-3 text-end">
+                  <button class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-receipt me-1"></i>Order Details
+                  </button>
+                  <button class="btn btn-sm btn-outline-primary ms-2">
+                    <i class="fas fa-shopping-bag me-1"></i>Visit Store
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+          
+          container.innerHTML = html;
+          
+          // Add animation to order cards
+          const orderCards = document.querySelectorAll('.order-card');
+          orderCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(15px)';
+            card.style.transition = 'all 0.3s ease';
+            
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, index * 100);
           });
         })
         .catch(err => {
-          console.error('Error fetching stores:', err);
-          container.innerHTML = `<p class="text-danger text-center">Failed to load stores. Please try again later.</p>`;
-        });
-    });
+          // Hide loader
+          loader.style.display = 'none';
+          
+          console.error('Error fetching orders:', err);
+          
+          // Display error message
+          container.style.display = 'none';
+          noOrders.style.display = 'block';
+          noOrders.innerHTML = `
+            <i class="fas fa-exclamation-triangle fa-3x mb-3 text-warning"></i>
+            <p class="text-danger">Failed to load your orders. Please try again later.</p>
+          `;        });
+    }
   </script>
 
 </body>

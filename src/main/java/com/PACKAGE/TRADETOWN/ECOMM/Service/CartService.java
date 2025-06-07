@@ -16,18 +16,24 @@ import com.PACKAGE.TRADETOWN.ECOMM.Repository.CartitemsRepository;
 public class CartService {
 
 	@Autowired CartRepository cartrepository;
-	@Autowired CartitemsRepository cartitemsrepo;
+	@Autowired CartitemsRepository cartitemsrepo;	
 	public void addToCart(String username, Optional<Product> product) {
 	    if (product.isEmpty()) return;  // Optional safety check
 
 	    Product prod = product.get();
 
 	    // Check if cart already exists
-	    Cart cart = cartrepository.findByUsername(username);
-	    if (cart == null) {
+	    List<Cart> carts = cartrepository.findByUsername(username);
+	    Cart cart;
+	    
+	    if (carts.isEmpty()) {
+	        // Create new cart if none exists
 	        cart = new Cart();
 	        cart.setUsername(username);
 	        cart = cartrepository.save(cart);  // save and reassign (for generated ID)
+	    } else {
+	        // Use the first cart found
+	        cart = carts.get(0);
 	    }
 
 	    // Create new Cartitems and associate with cart

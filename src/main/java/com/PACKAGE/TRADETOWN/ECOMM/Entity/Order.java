@@ -1,4 +1,4 @@
-package com.PACKAGE.TRADETOWN.ECOMM.Entity;
+ package com.PACKAGE.TRADETOWN.ECOMM.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
